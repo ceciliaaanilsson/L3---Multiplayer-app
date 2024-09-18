@@ -1,6 +1,5 @@
-// const ws = new WebSocket('ws://localhost:8080')
-// console.log(ws)
+import { GameClient } from "../../Multiplayer_Module/src/GameClient.js"
 
-// ws.onmessage = (event) => {
-//     console.log(event)
-// }
+const game = new GameClient('ws://localhost:8080')
+
+game.connect()
