@@ -1,5 +1,3 @@
-import { GameCharacter } from './GameCharacter.js'
-
 export class GameClient {
   constructor(url, maxRetries = 5, reconnectInterval = 1000) {
     this.url = url
@@ -8,34 +6,30 @@ export class GameClient {
     this.connectionRetries = 0
     this.ws
 
-    this.playerElement = document.getElementById('player')
-    this.player = new GameCharacter(0, 0, 2)
-    this.controllerSetup()
+    this.scale = 10
   }
 
-  connect() {
+  setupWebSocket() {
     console.log('Connecting to WebSocket server...')
-
     this.ws = new WebSocket(this.url)
-
+    
     this.ws.onopen = () => {
       console.log('Connected to WebSocket server!')
       this.connectionRetries = 0
     }
 
-    this.ws.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      console.log('Message from server:', data)
-      if (data.type === 'updatePosition') {
-        this.player.setPosition(data.x, data.z) // Uppdatera spelarens position
-        this.playerElement.style.top = data.z + 'px'
-        this.playerElement.style.left = data.x + 'px'
-      }
-    }
-
+    this.ws.onmessage = this.handleMessage.bind(this)
     this.ws.onclose = () => {
       console.log('Websocket connection closed:')
       this.reconnect()
+    }
+  }
+
+  handleMessage(event) {
+    const data = JSON.parse(event.data)
+    console.log('Message from server:', data)
+    if (data.type === 'updatePosition') {
+      this.updatePlayerPositionOnScreen(data.x, data.z)
     }
   }
 
@@ -46,49 +40,64 @@ export class GameClient {
 
       setTimeout(() => {
         console.log('Trying to reconnect...')
-        this.connect()
+        this.setupWebSocket()
       }, reconnectTime)
     } else {
       console.log('Reached max connection attempts. Try a different network.')
     }
   }
 
-  async controllerSetup() {
+  disconnectWebsocket() {
+    if (this.ws) {
+      this.ws.close()
+      console.log('Disconnected from Websocket.')
+    }
+  }
+
+  handleMovement(player) {
     const keysPressed = {}
     
     document.addEventListener('keydown', (e) => {
       keysPressed[e.key] = true
-    })
-  
+    });
+
     document.addEventListener('keyup', (e) => {
       keysPressed[e.key] = false
-    })
-  
+    });
+
     const updateMovement = () => {
-      let dx = 0, dz = 0;
-  
-      if (keysPressed['w']) dz -= 1;
-      if (keysPressed['s']) dz += 1;
-      if (keysPressed['a']) dx -= 1;
-      if (keysPressed['d']) dx += 1;
-  
+      let dx = 0, dz = 0
+    
+      if (keysPressed['w']) dz -= 1
+      if (keysPressed['s']) dz += 1
+      if (keysPressed['a']) dx -= 1
+      if (keysPressed['d']) dx += 1
+    
       if (dx !== 0 || dz !== 0) {
-        this.player.move(dx, dz);
-        this.sendPositionToServer();
+        player.move(dx, dz)
+        this.updatePlayerPositionOnScreen(player, player.position.x, player.position.z)
+        this.sendPositionToServer(player)
       }
-  
+    
       requestAnimationFrame(updateMovement)
     }
-  
+    
     updateMovement()
   }
 
-  sendPositionToServer() {
+  updatePlayerPositionOnScreen(player, x, z) {
+    player.element.style.left = `${x * this.scale}px`
+    player.element.style.top = `${z * this.scale}px`
+  }
+
+  sendPositionToServer(player) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const positionData = JSON.stringify({ type: 'move', x: this.player.position.x, z: this.player.position.z });
-      this.ws.send(positionData);
+      const positionData = JSON.stringify({
+        type: 'move',
+        x: player.position.x,
+        z: player.position.z
+      })
+      this.ws.send(positionData)
     }
   }
 }
-
-

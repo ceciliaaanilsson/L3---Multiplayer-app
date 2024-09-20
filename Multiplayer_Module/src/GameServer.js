@@ -17,23 +17,19 @@ class GameServer {
   handleMessage(ws, data) {
     const message = JSON.parse(data)
 
-    // Hantera spelarens rörelsemeddelande
     if (message.type === 'move') {
-      console.log(`Player moved to x=${message.x}, z=${message.z}`)
-
-      // Skicka tillbaka den nya positionen till alla klienter (inklusive spelaren)
       this.broadcast(JSON.stringify({
         type: 'updatePosition',
         x: message.x,
         z: message.z
-      }))
+      }), ws)
     }
   }
 
-  broadcast(message) {
+  broadcast(message, sender) {
     for (const client of this.wss.clients) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message) // Skicka meddelandet till alla klienter
+      if (client !== sender && client.readyState === WebSocket.OPEN) {
+        client.send(message)
       }
     }
   }
