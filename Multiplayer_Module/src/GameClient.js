@@ -5,13 +5,14 @@ export class GameClient {
     this.reconnectInterval = reconnectInterval
     this.connectionRetries = 0
     this.ws
-
     this.scale = 10
+    this.players = {}
   }
 
-  setupWebSocket() {
+  async setupWebSocket(player) {
     console.log('Connecting to WebSocket server...')
     this.ws = new WebSocket(this.url)
+    this.players[player.playerId] = player
     
     this.ws.onopen = () => {
       console.log('Connected to WebSocket server!')
@@ -25,15 +26,7 @@ export class GameClient {
     }
   }
 
-  handleMessage(event) {
-    const data = JSON.parse(event.data)
-    console.log('Message from server:', data)
-    if (data.type === 'updatePosition') {
-      this.updatePlayerPositionOnScreen(data.x, data.z)
-    }
-  }
-
-  reconnect() {
+  async reconnect() {
     if (this.connectionRetries < this.maxRetries) {
       this.connectionRetries++
       const reconnectTime = this.reconnectInterval * this.connectionRetries
@@ -54,8 +47,26 @@ export class GameClient {
     }
   }
 
-  handleMovement(player) {
+  async handleMessage(event) {
+    const data = JSON.parse(event.data);
+    console.log('Message from server:', data);
+    
+    if (data.type === 'updatePosition' && data.playerId) {
+      const player = this.players[data.playerId]
+      console.log(data)
+  
+      if (player) {
+        player.setPosition(data.x, data.z)
+        this.updatePlayerPositionOnScreen(player, data.x, data.z)
+      } else {
+        console.error(`Player with ID ${data.playerId} not found`)
+      }
+    }
+  }
+
+  async handleMovement(player) {
     const keysPressed = {}
+    console.log(this.players)
     
     document.addEventListener('keydown', (e) => {
       keysPressed[e.key] = true
@@ -77,6 +88,7 @@ export class GameClient {
         player.move(dx, dz)
         this.updatePlayerPositionOnScreen(player, player.position.x, player.position.z)
         this.sendPositionToServer(player)
+        console.log(player)
       }
     
       requestAnimationFrame(updateMovement)
@@ -85,18 +97,21 @@ export class GameClient {
     updateMovement()
   }
 
-  updatePlayerPositionOnScreen(player, x, z) {
+  async updatePlayerPositionOnScreen(player, x, z) {
+    this.players[player.playerId] = player
     player.element.style.left = `${x * this.scale}px`
     player.element.style.top = `${z * this.scale}px`
   }
 
-  sendPositionToServer(player) {
+  async sendPositionToServer(player) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const positionData = JSON.stringify({
         type: 'move',
+        playerId: player.playerId,
         x: player.position.x,
         z: player.position.z
       })
+      console.log(player)
       this.ws.send(positionData)
     }
   }
