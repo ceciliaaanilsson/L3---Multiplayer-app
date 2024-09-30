@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws'
 
-class GameServer {
+export class GameServer {
   constructor(port) {
     this.port = port
     this.players = {}
@@ -15,11 +15,11 @@ class GameServer {
   handleConnections(ws) {
     ws.on('message', (data) => this.handleMessage(ws, data))
   
-    ws.on('close', (data) => {
-      console.log(ws)
+    ws.on('close', () => {
       const playerId = ws.playerId
       if (playerId && this.players[playerId]) {
         delete this.players[playerId]
+        console.log(this.players)
         console.log(`Player ${playerId} disconnected.`)
   
 
@@ -38,8 +38,6 @@ class GameServer {
 
   handleMessage(ws, data) {
     const message = JSON.parse(data)
-    console.log('Message received:', message)
-  
     if (message.type === 'newPlayer') {
       ws.playerId = message.playerId
       this.players[message.playerId] = { x: message.x, z: message.z }
@@ -74,5 +72,3 @@ class GameServer {
     }
   }
 }
-
-new GameServer(8080)

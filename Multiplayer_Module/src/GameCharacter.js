@@ -12,6 +12,7 @@ export class GameCharacter {
     element.style.width = '50px'
     element.style.height = '50px'
     element.style.backgroundColor = color
+    element.style.borderRadius = '50%'
     document.getElementById('game-container').appendChild(element)
     return element
   }

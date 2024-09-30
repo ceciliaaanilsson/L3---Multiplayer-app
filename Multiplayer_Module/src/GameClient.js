@@ -27,6 +27,7 @@ export class GameClient {
       }
 
     this.wsManager.onmessage = this.handleMessage.bind(this)
+
     this.wsManager.connect()
   }
 
@@ -46,22 +47,30 @@ export class GameClient {
         this.players[playerId].setPosition(playerData.x, playerData.z)
         this.players[playerId].updateElementPosition(this.scale)
       })
-    }
-  
-    if (data.type === 'updatePosition') {
+    } else if (data.type === 'updatePosition') {
       let player = this.players[data.playerId]
   
       if (!player) {
         player = new GameCharacter(data.playerId, { x: data.x, z: data.z }, 'blue')
         this.addPlayer(player)
       }
-  
+
       player.setPosition(data.x, data.z)
       player.updateElementPosition(this.scale)
-    }
-  
-    if (data.type === 'playerDisconnected') {
+    } else if (data.type === 'playerDisconnected') {
       this.removePlayer(data.playerId)
+    } else {
+      throw new Error('Unknown message type: ', data.type)
+    }
+  }
+
+  removePlayer (playerId) {
+    const player = this.players[playerId]
+    if (player) {
+      if (player.element) {
+        player.element.remove()
+      }
+      delete this.players[playerId]
     }
   }
 

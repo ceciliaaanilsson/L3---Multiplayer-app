@@ -7,14 +7,16 @@ export class WebSocketManager {
       this.connectionRetries = 0
       this.onconnect = () => {}
       this.onmessage = (e) => {}
-      this.onclose = (e) => {}
 
       this.ws = new WebSocket(this.url)
     }
+
+    
   
     connect() {
         this.ws.onopen = (e) => {
           console.log('WebSocket connection opened:', e)
+          this.onconnect()
         }
       
         this.ws.onmessage = (e) => {
@@ -23,16 +25,15 @@ export class WebSocketManager {
       
         this.ws.onclose = (e) => {
           console.log('WebSocket connection closed:', e)
-          this.reconnect(e)
+          this.reconnect()
         }
       
         this.ws.onerror = (error) => {
           console.error('WebSocket encountered error: ', error)
         }
-        this.onconnect()
       }
   
-    reconnect(e) {
+    reconnect() {
       if (this.connectionRetries < this.maxRetries) {
         this.connectionRetries++
         setTimeout(() => {
@@ -40,19 +41,12 @@ export class WebSocketManager {
         }, this.reconnectInterval * this.connectionRetries)
       } else {
         console.log('Max retries reached.')
-        this.onclose(e)
       }
     }
   
     send(data) {
       if (this.ws && this.ws.readyState === WebSocket.OPEN) {
         this.ws.send(JSON.stringify(data))
-      }
-    }
-  
-    close() {
-      if (this.ws) {
-        this.ws.close()
       }
     }
   }
