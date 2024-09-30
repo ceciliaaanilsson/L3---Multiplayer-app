@@ -8,3 +8,12 @@ A simple WebSocket-based game server and client where players can connect, move 
 - Server manages connections, disconnections, and position updates.
 - Players can move around the game world using the keyboard (W, A, S, D).
 - Utilizes WebSockets for fast communication between the client and server.
+
+
+## Dependencies
+
+The project has the following dependency:
+
+- **[ws](https://www.npmjs.com/package/ws)**: A simple WebSocket library for Node.js:
+  ```bash
+  npm install ws
