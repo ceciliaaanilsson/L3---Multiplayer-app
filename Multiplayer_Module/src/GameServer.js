@@ -1,6 +1,13 @@
 import { WebSocketServer, WebSocket } from 'ws'
 
+/**
+ * GameServer class that manages WebSocket connections for a multiplayer game.
+ */
 export class GameServer {
+  /**
+   * Creates a new GameServer instance and sets up the WebSocket server.
+   * @param {number} port - The port number on which the WebSocket server will listen.
+   */
   constructor(port) {
     this.port = port
     this.players = {}
@@ -12,6 +19,10 @@ export class GameServer {
       
   }
 
+  /**
+   * Handles new WebSocket connections and listens for incoming messages or disconnections.
+   * @param {WebSocket} ws - The WebSocket instance for the connected client.
+   */
   handleConnections(ws) {
     ws.on('message', (data) => this.handleMessage(ws, data))
   
@@ -36,6 +47,12 @@ export class GameServer {
     }))
   }
 
+  /**
+   * Handles incoming messages from clients. It processes different message types
+   * like 'newPlayer' and 'move'.
+   * @param {WebSocket} ws - The WebSocket instance for the connected client.
+   * @param {string} data - The raw message data received from the client.
+   */
   handleMessage(ws, data) {
     const message = JSON.parse(data)
     if (message.type === 'newPlayer') {
@@ -64,6 +81,11 @@ export class GameServer {
     }
   }
 
+  /**
+   * Broadcasts a message to all connected WebSocket clients except the sender.
+   * @param {string} message - The message to be sent to all clients.
+   * @param {WebSocket} sender - The WebSocket instance of the client who sent the message.
+   */
   broadcast(message, sender) {
     for (const client of this.wss.clients) {
       if (client !== sender && client.readyState === WebSocket.OPEN) {

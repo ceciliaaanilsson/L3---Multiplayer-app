@@ -12,10 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const startPosition = { x: 0, z: 0 }
   const player = new CustomGameCharacter(generateId(), startPosition)
   const gameClient = new GameClient(gameUrl, CustomGameCharacter)
-  console.log(player)
-  
-
-
 
   gameClient.setupWebSocket(player)
   gameClient.handleMovement(player)

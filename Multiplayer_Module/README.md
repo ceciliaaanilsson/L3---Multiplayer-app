@@ -46,4 +46,33 @@ new GameServer(port)
 ## Clientcode
 
 ```javascript
+import { WebSocketManager, GameClient, GameCharacter } from '@cissi/multiplayer-socket'
+
+// Define the player's start position
+const startPosition = { x: 0, z: 0 }
+
+// Assign a unique Player ID (you may want to fetch or generate this dynamically)
+const playerId = 'player_123'
+
+// Create a new game character instance
+const player = new GameCharacter(playerId, startPosition)
+
+// Define the WebSocket server URL
+const gameUrl = 'ws://localhost:8080'
+
+// Create a new GameClient instance
+// Optional: Extend GameCharacter if needed and pass it as a second argument
+const gameClient = new GameClient(gameUrl)
+
+gameClient.getPlayers() // Returns a list of player objects.
+
+gameClient.addPlayer(player) // Adds a player to the list and takes a player object as argument.
+
+gameClient.removePlayer(playerId) // Takes a playerId as argument and removes the player with the id from the list.
+
+// Connect the player to the WebSocket server
+gameClient.setupWebSocket(player)
+
+// Handle player movement using keyboard controls (W, A, S, D)
+gameClient.handleMovement(player)
 ```

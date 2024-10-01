@@ -9,10 +9,19 @@ export class GameClient {
     this.characterClass = characterClass
   }
 
+  getPlayers() {
+    return this.players
+  }
+
   addPlayer(player) {
     this.players[player.playerId] = player
   }
 
+  /**
+   * Sets up the WebSocket connection for the player and sends initial data to the server.
+   * @param {GameCharacter} player - The player initiating the WebSocket connection.
+   * @returns {Promise<void>}
+   */
   async setupWebSocket(player) {
     this.addPlayer(player)
 
@@ -32,6 +41,11 @@ export class GameClient {
     this.wsManager.connect()
   }
 
+  /**
+   * Handles incoming WebSocket messages and updates players' positions or removes players.
+   * @param {MessageEvent} event - The message event containing data from the server.
+   * @returns {Promise<void>}
+   */
   async handleMessage(event) {
     const data = JSON.parse(event.data)
     console.log('Data received from server:', data)
@@ -75,6 +89,17 @@ export class GameClient {
     }
   }
 
+  /**
+   * Handles keyboard input and updates player movement accordingly.
+   * Sends movement data to the server when the player moves.
+   * 
+   * - W: Move forward
+   * - S: Move backward
+   * - A: Move left
+   * - D: Move right
+   * 
+   * @param {GameCharacter} player - The player whose movement is controlled.
+   */
   handleMovement(player) {
     const keysPressed = {}
 
