@@ -1,9 +1,9 @@
 export class WebSocketManager {
 
-    constructor(url, maxRetries = 5, reconnectInterval = 1000) {
+    constructor(url) {
       this.url = url
-      this.maxRetries = maxRetries
-      this.reconnectInterval = reconnectInterval
+      this.maxRetries = 5
+      this.reconnectInterval = 1000
       this.connectionRetries = 0
       this.onconnect = () => {}
       this.onmessage = (e) => {}

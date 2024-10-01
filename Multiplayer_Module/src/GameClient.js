@@ -2,10 +2,11 @@ import { WebSocketManager } from './WebSocketManager.js'
 import { GameCharacter } from './GameCharacter.js'
 
 export class GameClient {
-  constructor(url, maxRetries = 5, reconnectInterval = 1000) {
+  constructor(url, characterClass = GameCharacter) {
     this.players = {}
     this.scale = 10
-    this.wsManager = new WebSocketManager(url, maxRetries, reconnectInterval)
+    this.wsManager = new WebSocketManager(url)
+    this.characterClass = characterClass
   }
 
   addPlayer(player) {
@@ -40,7 +41,7 @@ export class GameClient {
         const playerData = data.players[playerId]
   
         if (!this.players[playerId]) {
-          const newPlayer = new GameCharacter(playerId, { x: playerData.x, z: playerData.z }, 'blue')
+          const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z }, 'blue')
           this.addPlayer(newPlayer)
         }
   
@@ -51,7 +52,7 @@ export class GameClient {
       let player = this.players[data.playerId]
   
       if (!player) {
-        player = new GameCharacter(data.playerId, { x: data.x, z: data.z }, 'blue')
+        player = new this.characterClass(data.playerId, { x: data.x, z: data.z }, 'blue')
         this.addPlayer(player)
       }
 
