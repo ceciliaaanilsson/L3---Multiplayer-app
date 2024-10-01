@@ -76,3 +76,8 @@ gameClient.setupWebSocket(player)// Connect the player to the WebSocket server.
 
 gameClient.handleMovement(player)// Handle player movement using keyboard controls (W, A, S, D).
 ```
+
+## License
+MIT ©
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
