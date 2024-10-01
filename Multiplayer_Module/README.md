@@ -70,9 +70,9 @@ gameClient.addPlayer(player) // Adds a player to the list and takes a player obj
 
 gameClient.removePlayer(playerId) // Takes a playerId as argument and removes the player with the id from the list.
 
-// Connect the player to the WebSocket server
-gameClient.setupWebSocket(player)
 
-// Handle player movement using keyboard controls (W, A, S, D)
-gameClient.handleMovement(player)
+gameClient.setupWebSocket(player)// Connect the player to the WebSocket server.
+
+
+gameClient.handleMovement(player)// Handle player movement using keyboard controls (W, A, S, D).
 ```
