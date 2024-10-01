@@ -81,3 +81,9 @@ gameClient.handleMovement(player)// Handle player movement using keyboard contro
 MIT ©
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+
+## Github
+
+### [Repository](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/tree/main/Multiplayer_Module)
+
+Testing is done by using the classes and methods in simple app in the [test_folder](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/tree/main/test_folder).
