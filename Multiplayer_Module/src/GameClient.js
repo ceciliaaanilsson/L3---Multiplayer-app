@@ -2,6 +2,13 @@ import { WebSocketManager } from './WebSocketManager.js'
 import { GameCharacter } from './GameCharacter.js'
 
 export class GameClient {
+  /**
+   * Represents a client in the multiplayer game, responsible for managing players and WebSocket connections.
+   *
+   * @class
+   * @param {string} url - The URL of the WebSocket server to connect to.
+   * @param {function} characterClass - The class used to create player characters, defaults to GameCharacter.
+   */
   constructor(url, characterClass = GameCharacter) {
     this.players = {}
     this.scale = 10
@@ -15,6 +22,7 @@ export class GameClient {
 
   addPlayer(player) {
     this.players[player.playerId] = player
+    player.updateElementPosition(this.scale)
   }
 
   /**
@@ -55,7 +63,7 @@ export class GameClient {
         const playerData = data.players[playerId]
   
         if (!this.players[playerId]) {
-          const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z }, 'blue')
+          const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z })
           this.addPlayer(newPlayer)
         }
   
@@ -66,7 +74,7 @@ export class GameClient {
       let player = this.players[data.playerId]
   
       if (!player) {
-        player = new this.characterClass(data.playerId, { x: data.x, z: data.z }, 'blue')
+        player = new this.characterClass(data.playerId, { x: data.x, z: data.z })
         this.addPlayer(player)
       }
 
@@ -132,7 +140,6 @@ export class GameClient {
 
       requestAnimationFrame(updateMovement)
     }
-
     updateMovement()
   }
 }

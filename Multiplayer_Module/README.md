@@ -55,6 +55,7 @@ const startPosition = { x: 0, z: 0 }
 const playerId = 'player_123'
 
 // Create a new game character instance
+// GameCharacter accepts a third optional argument for the character's color. If not provided, the default color is set to blue.
 const player = new GameCharacter(playerId, startPosition)
 
 // Define the WebSocket server URL
@@ -80,10 +81,10 @@ gameClient.handleMovement(player)// Handle player movement using keyboard contro
 ## License
 MIT ©
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/blob/main/Multiplayer_Module/LICENSE.md) file for details.
 
 ## Github
 
-### [Repository](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/tree/main/Multiplayer_Module)
+#### [Github Repository](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/tree/main/Multiplayer_Module)
 
 Testing is done by using the classes and methods in simple app in the [test_folder](https://github.com/ceciliaaanilsson/L2---Multiplayer-module/tree/main/test_folder).

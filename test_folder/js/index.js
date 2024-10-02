@@ -9,9 +9,19 @@ function generateId() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const gameUrl = 'ws://localhost:8080'
-  const startPosition = { x: 0, z: 0 }
+  const startPosition = { x: 10, z: 10 }
   const player = new CustomGameCharacter(generateId(), startPosition)
   const gameClient = new GameClient(gameUrl, CustomGameCharacter)
+
+  const player2 = new CustomGameCharacter(generateId(), { x: 20, z: 20 })
+  gameClient.addPlayer(player2)
+
+  setTimeout(() => {
+    gameClient.removePlayer(player2.playerId)
+  }, 3000)
+
+  const players = gameClient.getPlayers()
+  console.log(players)
 
   gameClient.setupWebSocket(player)
   gameClient.handleMovement(player)
