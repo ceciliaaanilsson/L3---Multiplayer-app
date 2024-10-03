@@ -30,10 +30,8 @@ export class GameServer {
       const playerId = ws.playerId
       if (playerId && this.players[playerId]) {
         delete this.players[playerId]
-        console.log(this.players)
         console.log(`Player ${playerId} disconnected.`)
   
-
         this.broadcast(JSON.stringify({
           type: 'playerDisconnected',
           playerId: playerId
