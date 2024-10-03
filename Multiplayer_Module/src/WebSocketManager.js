@@ -29,7 +29,7 @@ export class WebSocketManager {
       }
     
       this.ws.onmessage = (e) => {
-          this.onmessage(e)
+        this.onmessage(e)
       }
     
       this.ws.onclose = (e) => {

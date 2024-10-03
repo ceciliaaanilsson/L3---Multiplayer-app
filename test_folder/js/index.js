@@ -10,10 +10,10 @@ function generateId() {
 document.addEventListener('DOMContentLoaded', () => {
   const gameUrl = 'ws://localhost:8080'
   const startPosition = { x: 10, z: 10 }
-  const player = new CustomGameCharacter(generateId(), startPosition)
-  const gameClient = new GameClient(gameUrl, CustomGameCharacter)
+  const player = new GameCharacter(generateId(), startPosition)
+  const gameClient = new GameClient(gameUrl, GameCharacter)
 
-  const player2 = new CustomGameCharacter(generateId(), { x: 20, z: 20 })
+  const player2 = new GameCharacter(generateId(), { x: 20, z: 20 })
   gameClient.addPlayer(player2)
 
   setTimeout(() => {

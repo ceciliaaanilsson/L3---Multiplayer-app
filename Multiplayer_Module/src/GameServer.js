@@ -16,7 +16,6 @@ export class GameServer {
     this.wss.on('connection', (ws) => {
       this.handleConnections(ws)
     })
-      
   }
 
   /**
