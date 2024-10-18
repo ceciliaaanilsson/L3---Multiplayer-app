@@ -25,23 +25,25 @@ export class GameServer {
   handleConnections(ws) {
     ws.on('message', (data) => this.handleMessage(ws, data))
   
-    ws.on('close', () => {
-      const playerId = ws.playerId
-      if (playerId && this.players[playerId]) {
-        delete this.players[playerId]
-        console.log(`Player ${playerId} disconnected.`)
-  
-        this.broadcast(JSON.stringify({
-          type: 'playerDisconnected',
-          playerId: playerId
-        }), ws)
-      }
-    })
+    ws.on('close', (ws) => this.onClose(ws))
   
     ws.send(JSON.stringify({
       type: 'initialPositions',
       players: this.players
     }))
+  }
+
+  onClose(ws) {
+    const playerId = ws.playerId
+    if (playerId && this.players[playerId]) {
+      delete this.players[playerId]
+      console.log(`Player ${playerId} disconnected.`)
+
+      this.broadcast(JSON.stringify({
+        type: 'playerDisconnected',
+        playerId: playerId
+      }), ws)
+    }
   }
 
   /**
