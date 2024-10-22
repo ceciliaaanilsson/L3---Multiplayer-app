@@ -11,7 +11,7 @@ export class GameClient {
    */
   constructor(url, characterClass = GameCharacter) {
     this.players = {}
-    this.scale = 10
+    this.scale = 5
     this.wsManager = new WebSocketManager(url)
     this.characterClass = characterClass
   }

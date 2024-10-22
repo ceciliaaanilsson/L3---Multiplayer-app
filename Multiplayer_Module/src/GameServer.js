@@ -24,8 +24,10 @@ export class GameServer {
    */
   handleConnections(ws) {
     ws.on('message', (data) => this.handleMessage(ws, data))
-  
-    ws.on('close', (ws) => this.onClose(ws))
+
+    ws.on('close', () => {
+      this.onClose(ws)
+    }) 
   
     ws.send(JSON.stringify({
       type: 'initialPositions',
@@ -33,7 +35,7 @@ export class GameServer {
     }))
   }
 
-  onClose(ws) {
+  onClose (ws) {
     const playerId = ws.playerId
     if (playerId && this.players[playerId]) {
       delete this.players[playerId]
