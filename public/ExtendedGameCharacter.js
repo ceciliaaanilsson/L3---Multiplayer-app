@@ -25,9 +25,4 @@ export class ExtendedGameCharacter extends GameCharacter {
 
     return imgElement
   }
-
-  move(dx, dz) {
-    this.position.x += dx
-    this.position.z += dz
-  }
 }

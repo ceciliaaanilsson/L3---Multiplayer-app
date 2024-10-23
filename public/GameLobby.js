@@ -6,7 +6,7 @@ export class GameLobby {
   this.maxPlayers = 18
   }
 
-  addPlayerToLoby(player) {
+  addPlayer(player) {
     if (!this.isLobbyFull()) {
       this.players[player.playerId] = player
     }

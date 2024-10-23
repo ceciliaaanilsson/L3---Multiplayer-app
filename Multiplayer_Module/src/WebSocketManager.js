@@ -64,6 +64,10 @@ export class WebSocketManager {
   send(data) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(data))
+    } else {
+      setTimeout (() => {
+        this.send(data)
+      }, 1000)
     }
   }
 }

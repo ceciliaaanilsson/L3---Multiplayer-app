@@ -128,14 +128,19 @@ export class GameClient {
       if (keysPressed['d']) dx += 1
 
       if (dx !== 0 || dz !== 0) {
-        player.move(dx, dz)
-        player.updateElementPosition(this.scale)
-        this.wsManager.send({
-          type: 'move',
-          playerId: player.playerId,
-          x: player.position.x,
-          z: player.position.z
-        })
+        const newPositionX = player.position.x + dx
+        const newPositionz = player.position.z + dz
+        console.log(newPositionX, newPositionz)
+        if (!(newPositionX > 250 || newPositionX < 0 || newPositionz > 235 || newPositionz < 0)) {
+          player.move(dx, dz)
+          player.updateElementPosition(this.scale)
+          this.wsManager.send({
+            type: 'move',
+            playerId: player.playerId,
+            x: player.position.x,
+            z: player.position.z
+          })
+        }
       }
 
       requestAnimationFrame(updateMovement)
