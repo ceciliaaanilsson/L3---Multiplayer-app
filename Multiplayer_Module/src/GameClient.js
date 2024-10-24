@@ -11,7 +11,7 @@ export class GameClient {
    */
   constructor(url, characterClass = GameCharacter) {
     this.players = {}
-    this.scale = 5
+    this.scale = 1
     this.wsManager = new WebSocketManager(url)
     this.characterClass = characterClass
   }
@@ -33,7 +33,7 @@ export class GameClient {
   async setupWebSocket(player) {
     this.addPlayer(player)
 
-    this.wsManager.onconnect = 
+    this.wsManager.onconnect =
       () => {
         console.log('Connected to WebSocket server!')
         this.wsManager.send({
@@ -57,22 +57,22 @@ export class GameClient {
   async handleMessage(event) {
     const data = JSON.parse(event.data)
     console.log('Data received from server:', data)
-  
+
     if (data.type === 'initialPositions') {
       Object.keys(data.players).forEach(playerId => {
         const playerData = data.players[playerId]
-  
+
         if (!this.players[playerId]) {
           const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z })
           this.addPlayer(newPlayer)
         }
-  
+
         this.players[playerId].setPosition(playerData.x, playerData.z)
         this.players[playerId].updateElementPosition(this.scale)
       })
     } else if (data.type === 'updatePosition') {
       let player = this.players[data.playerId]
-  
+
       if (!player) {
         player = new this.characterClass(data.playerId, { x: data.x, z: data.z })
         this.addPlayer(player)
@@ -87,7 +87,7 @@ export class GameClient {
     }
   }
 
-  removePlayer (playerId) {
+  removePlayer(playerId) {
     const player = this.players[playerId]
     if (player) {
       if (player.element) {
@@ -119,32 +119,36 @@ export class GameClient {
       keysPressed[e.key] = false
     })
 
-    const updateMovement = () => {
-      let dx = 0, dz = 0;
+    this.eachFrame(0, player, keysPressed)
+  }
 
-      if (keysPressed['w']) dz -= 1
-      if (keysPressed['s']) dz += 1
-      if (keysPressed['a']) dx -= 1
-      if (keysPressed['d']) dx += 1
+  eachFrame (timeStamp, player, keysPressed) {
+    this.updateMovement(player, keysPressed)
+    requestAnimationFrame((time) => {this.eachFrame(time, player, keysPressed)})
+  }
 
-      if (dx !== 0 || dz !== 0) {
-        const newPositionX = player.position.x + dx
-        const newPositionz = player.position.z + dz
-        console.log(newPositionX, newPositionz)
-        if (!(newPositionX > 250 || newPositionX < 0 || newPositionz > 235 || newPositionz < 0)) {
-          player.move(dx, dz)
-          player.updateElementPosition(this.scale)
-          this.wsManager.send({
-            type: 'move',
-            playerId: player.playerId,
-            x: player.position.x,
-            z: player.position.z
-          })
-        }
+  updateMovement (player, keysPressed) {
+    let dx = 0, dz = 0;
+
+    if (keysPressed['w']) dz -= 5
+    if (keysPressed['s']) dz += 5
+    if (keysPressed['a']) dx -= 5
+    if (keysPressed['d']) dx += 5
+
+    if (dx !== 0 || dz !== 0) {
+      const newPositionX = player.position.x + dx
+      const newPositionz = player.position.z + dz
+      
+      if (!(newPositionX > 1270 || newPositionX < 0 || newPositionz > 1165 || newPositionz < 0)) {
+        player.move(dx, dz)
+        player.updateElementPosition()
+        this.wsManager.send({
+          type: 'move',
+          playerId: player.playerId,
+          x: player.position.x,
+          z: player.position.z
+        })
       }
-
-      requestAnimationFrame(updateMovement)
     }
-    updateMovement()
   }
 }

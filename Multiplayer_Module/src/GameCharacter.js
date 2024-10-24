@@ -42,6 +42,7 @@ export class GameCharacter {
   move(dx, dz) {
     this.position.x += dx
     this.position.z += dz
+
   }
 
   /**
@@ -50,8 +51,8 @@ export class GameCharacter {
    * 
    * @param {number} scale - The scaling factor used to adjust the position of the character's element.
    */
-  updateElementPosition(scale) {
-    this.element.style.left = `${this.position.x * scale}px`
-    this.element.style.top = `${this.position.z * scale}px`
+  updateElementPosition() {
+    this.element.style.left = `${this.position.x}px`
+    this.element.style.top = `${this.position.z}px`
   }
 }

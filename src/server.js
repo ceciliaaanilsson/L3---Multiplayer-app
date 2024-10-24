@@ -1,3 +1,3 @@
-import { GameServer } from './../Multiplayer_Module/src/GameServer.js'
+import { ExtendedGameServer } from './ExtendedGameServer.js'
 
-new GameServer(8080)
+new ExtendedGameServer(8080)

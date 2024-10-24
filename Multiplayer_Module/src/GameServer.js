@@ -23,7 +23,7 @@ export class GameServer {
    * @param {WebSocket} ws - The WebSocket instance for the connected client.
    */
   handleConnections(ws) {
-    ws.on('message', (data) => this.handleMessage(ws, data))
+    ws.on('message', (data) => this.handleMessageType(ws, data))
 
     ws.on('close', () => {
       this.onClose(ws)
@@ -54,22 +54,32 @@ export class GameServer {
    * @param {WebSocket} ws - The WebSocket instance for the connected client.
    * @param {string} data - The raw message data received from the client.
    */
-  handleMessage(ws, data) {
+  handleMessageType(ws, data) {
     const message = JSON.parse(data)
+  
     if (message.type === 'newPlayer') {
       ws.playerId = message.playerId
-      this.players[message.playerId] = { x: message.x, z: message.z }
-      console.log('New player connected:', this.players)
-      
-      this.broadcast(JSON.stringify({
-        type: 'updatePosition',
-        playerId: message.playerId,
-        x: message.x,
-        z: message.z
-      }), ws)
+      this.messageTypeNewPlayer(message, ws)
     }
-  
+
     if (message.type === 'move') {
+      this.messageTypeMove(message, ws)
+    }
+  }
+
+  messageTypeNewPlayer(message, ws) {
+    this.players[message.playerId] = { x: message.x, z: message.z }
+    console.log('New player connected:', this.players)
+      
+    this.broadcast(JSON.stringify({
+      type: 'updatePosition',
+      playerId: message.playerId,
+      x: message.x,
+      z: message.z
+    }), ws)
+  }
+
+  messageTypeMove(message, ws) {
       this.players[message.playerId] = { x: message.x, z: message.z }
       console.log('Updated players:', this.players)
       
@@ -79,7 +89,6 @@ export class GameServer {
         x: message.x,
         z: message.z
       }), ws)
-    }
   }
 
   /**

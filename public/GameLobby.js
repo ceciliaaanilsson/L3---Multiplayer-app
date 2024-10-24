@@ -1,9 +1,10 @@
 export class GameLobby {
   
-  constructor(lobbyId) {
+  constructor(lobbyId, flowerData) {
   this.lobbyId = lobbyId
   this.players = {}
   this.maxPlayers = 18
+  this.flowerData = flowerData
   }
 
   addPlayer(player) {

@@ -7,7 +7,7 @@ export class GameLogic {
   constructor() {
     this.connectPlayer()
     this.lobbyManager = new GameLobbyManager()
-    new FlowerSpawner()
+    this.flowerSpawner = new FlowerSpawner()
     this.url = 'ws://localhost:8080'
   }
 
@@ -35,12 +35,7 @@ export class GameLogic {
     }
   
     this.lobbyManager.addPlayerToLobby(targetLobby.lobbyId, player)
-    if (gameClient.wsManager.ws.readyState === WebSocket.OPEN) {
-      console.log('open')
-    } else {
-      console.log('closed')
-    }
-    console.log(gameClient)
+
     gameClient.sendCustomMessage({
       type: 'playerAddedToLobby',
       lobbyId: targetLobby.lobbyId,
