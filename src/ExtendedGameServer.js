@@ -45,6 +45,11 @@ export class ExtendedGameServer extends GameServer {
     }))
   }
 
+  /**
+   * Sends data to client when connected.
+   * 
+   * @param {object} ws 
+   */
   handleConnections(ws) {
     super.handleConnections(ws)
     const flowerData = this.flowerGenerator.getFlowerData()

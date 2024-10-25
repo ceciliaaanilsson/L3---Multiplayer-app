@@ -12,6 +12,11 @@ export class ExtendedGameClient extends GameClient {
     this.wsManager.send(data)
   }
 
+  /**
+   * Handles data sent from server.
+   * 
+   * @param {object} event 
+   */
   async handleMessage(event) {
     const data = JSON.parse(event.data)
     console.log('Data received from server:', data)

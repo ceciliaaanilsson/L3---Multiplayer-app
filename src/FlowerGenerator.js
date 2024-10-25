@@ -6,6 +6,11 @@ export class FlowerGenerator {
     this.#generateFlowers()
   }
 
+  /**
+   * Creates flowers specifikation.
+   * 
+   * @returns {object} - Flowers elements specifikation.
+   */
   #createFlowerData() {
     const imageSource = this.#getRandomFlowerImage()
     const defaultWidth = 1425

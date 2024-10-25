@@ -10,6 +10,9 @@ export class GameLogic {
     this.url = 'ws://localhost:8080'
   }
 
+  /**
+   * Connects player to WebSocket connection.
+   */
   connectPlayer() {
     document.addEventListener('DOMContentLoaded', () => {
       const player = new ExtendedGameCharacter(this.generateUniqueId())

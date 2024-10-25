@@ -15,6 +15,12 @@ export class FlowerSpawner {
     return img
   }
 
+  /**
+   * Places flower element in the DOM.
+   * 
+   * @param {object} data 
+   * @param {string} flowerId 
+   */
   placeFlower(data, flowerId) {
     const flower = this.createFlowerElement(data.imageSource, data.x, data.z, data.size)
     flower.setAttribute('id', flowerId)
