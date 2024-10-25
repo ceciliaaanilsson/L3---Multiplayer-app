@@ -38,31 +38,33 @@ export class ExtendedGameClient extends GameClient {
 
       player.setPosition(data.x, data.z)
       player.updateElementPosition(this.scale)
-      this.checkCollision(player)
     } else if (data.type === 'playerDisconnected') {
       this.removePlayer(data.playerId)
     } else if (data.type === 'spawnFlowers') {
-      console.log(Object.keys(data.data))
-      this.spawnFlowers(data.data)
+      this.#spawnFlowers(data.data)
     } else if (data.type === 'removeFlower') {
-      this.removeFlower(data.flowerId)
+      this.#removeFlower(data.flowerId)
     } else {
       throw new Error('Unknown message type: ', data.type)
     }
   }
 
-  spawnFlowers(flowerData, flowerId) {
+  #spawnFlowers(flowerData, flowerId) {
     this.flowerSpawner.placeAllFlowers(flowerData, flowerId)
     this.flowers = { ...this.flowers, ...flowerData }
-    console.log(this.flowers)
   }
 
   updateMovement(player, keysPressed) {
     super.updateMovement(player, keysPressed)
-    this.checkCollision(player)
+    this.#checkCollision(player)
   }
 
-  checkCollision(player) {
+  /**
+   * Checks if the player colide with a flower.
+   * 
+   * @param {object} player - The player object
+   */
+  #checkCollision(player) {
     for (const flowerId of Object.keys(this.flowers)) {
       const flower = this.flowers[flowerId]
       const flowerX = parseFloat(flower.x)
@@ -81,7 +83,7 @@ export class ExtendedGameClient extends GameClient {
     }
   }
 
-  removeFlower(flowerId) {
+  #removeFlower(flowerId) {
     const flower = document.getElementById(flowerId)
     flower.remove()
     delete this.flowers[flowerId]

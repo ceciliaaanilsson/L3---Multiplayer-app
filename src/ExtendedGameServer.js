@@ -5,8 +5,8 @@ export class ExtendedGameServer extends GameServer {
   constructor(port) {
     super(port)
     this.flowers = {}
-    this.flowerGenerator = new FlowerGenerator(50)
-    this.startFlowerGenerationInterval()
+    this.flowerGenerator = new FlowerGenerator(60)
+    // this.startFlowerGenerationInterval()
   }
 
   /**
@@ -57,7 +57,7 @@ export class ExtendedGameServer extends GameServer {
 
   startFlowerGenerationInterval() {
     setInterval(() => {
-      const flowerGenerator = new FlowerGenerator(50)
+      const flowerGenerator = new FlowerGenerator(60)
       const flowerData = flowerGenerator.getFlowerData()
 
         this.broadcast(JSON.stringify({
@@ -65,6 +65,6 @@ export class ExtendedGameServer extends GameServer {
           data: flowerData
         }))
 
-    }, 20000)
+    }, 22000)
   }
 }

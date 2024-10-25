@@ -16,7 +16,6 @@ export class FlowerSpawner {
   }
 
   placeFlower(data, flowerId) {
-    console.log(flowerId)
     const flower = this.createFlowerElement(data.imageSource, data.x, data.z, data.size)
     flower.setAttribute('id', flowerId)
     this.container.appendChild(flower)

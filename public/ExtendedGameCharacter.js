@@ -1,12 +1,17 @@
 import { GameCharacter } from '../Multiplayer_Module/src/GameCharacter.js'
 
 export class ExtendedGameCharacter extends GameCharacter {
-  constructor(playerId, startPosition = { x: 0, z: 0}) {
+  constructor(playerId, startPosition = { x: 0, z: 0 }) {
     super(playerId, startPosition)
     this.points = 0
     this.pointsElement = this.createPointsElement()
   }
 
+  /**
+   * Creates a player element and append the element to game-container element.
+   * 
+   * @returns - Player element.
+   */
   createPlayerElement() {
     const playerElement = document.createElement('div')
     playerElement.style.position = 'absolute'
@@ -14,14 +19,19 @@ export class ExtendedGameCharacter extends GameCharacter {
     playerElement.style.backgroundRepeat = 'no-repeat'
     playerElement.appendChild(characterImage)
     document.getElementById('game-container').appendChild(playerElement)
-    
+
     return playerElement
   }
 
+  /**
+   * Creates the players image element and adds the element rules.
+   *
+   * @returns - Image element.
+   */
   createPlayerImage() {
     const imgElement = document.createElement('img')
-    imgElement.src = '../img/game_character_l3.png'
-    imgElement.alt = 'Player Image'
+    const imageSource = '../img/game_character_l3.png'
+    imgElement.src = imageSource
     imgElement.style.width = '50px'
     imgElement.style.height = '50px'
     imgElement.style.zIndex = '100'
@@ -34,6 +44,11 @@ export class ExtendedGameCharacter extends GameCharacter {
     this.updatePointsDisplay()
   }
 
+  /**
+   * Creates the points element.
+   *
+   * @returns - Points element.
+   */
   createPointsElement() {
     const pointsElement = document.createElement('div')
     pointsElement.style.position = 'absolute'
@@ -52,9 +67,5 @@ export class ExtendedGameCharacter extends GameCharacter {
   updatePointsDisplay() {
     this.pointsElement.innerHTML = ''
     this.pointsElement.innerText = `Points: ${this.points}`
-  }
-
-  showPlayerPoints() {
-    this.updatePointsDisplay()
   }
 }
