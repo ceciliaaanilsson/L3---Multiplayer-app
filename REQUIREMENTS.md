@@ -1,5 +1,6 @@
 ## Requirements
 
-- The app should be a type of game were players can meet eachother.
-- The app should have a function where people can compete.
-- The app should have a colorful user interface.
+- Flowers should be removed when a player is close.
+- The app should count points for each picked flower.
+- Players should interact realtime.
+- Player should be able to move in x- and z-axis.

@@ -48,7 +48,7 @@ export class ExtendedGameServer extends GameServer {
   handleConnections(ws) {
     super.handleConnections(ws)
     const flowerData = this.flowerGenerator.getFlowerData()
-    console.log(flowerData)
+
     ws.send(JSON.stringify({
       type: 'spawnFlowers',
       data: flowerData
