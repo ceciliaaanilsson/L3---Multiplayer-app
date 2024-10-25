@@ -8,8 +8,8 @@ export class FlowerGenerator {
 
   #createFlowerData() {
     const imageSource = this.#getRandomFlowerImage()
-    const defaultWidth = 1270
-    const defaultHeight = 1165
+    const defaultWidth = 1425
+    const defaultHeight = 770
     const x = Math.random() * (defaultWidth - 50)
     const z = Math.random() * (defaultHeight - 50)
     const size = Math.random() * 10 + 20

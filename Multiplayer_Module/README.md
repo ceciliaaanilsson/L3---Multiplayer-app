@@ -1,6 +1,6 @@
 # WebSocket Game Client and Server
 
-A simple WebSocket-based game server and client where players can connect, move around in a 2D world, and see other players' movements in real-time.
+A simple WebSocket-based module using server and client where players can connect, move around in a 2D world, and see other players' movements in real-time.
 
 ## Features
 - Real-time player position updates using WebSockets.
@@ -22,17 +22,11 @@ The project has the following dependency:
   npm install ws
   ```
 
-  
-
-## Installation
-  ```bash
-  npm install @cissi/multiplayer-socket
-  ```
+  ``
 
 ## Usage
-1. Install the module as described.
-2. Import the classes as needed.
-3. Use the methods provided by each class.
+1. Import the classes as needed.
+2. Use the methods provided by each class.
 
 ## Servercode
 ```javascript

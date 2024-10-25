@@ -6,7 +6,7 @@ export class ExtendedGameServer extends GameServer {
     super(port)
     this.flowers = {}
     this.flowerGenerator = new FlowerGenerator(60)
-    // this.startFlowerGenerationInterval()
+    this.startFlowerGenerationInterval()
   }
 
   /**

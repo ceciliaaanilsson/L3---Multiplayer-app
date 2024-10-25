@@ -59,31 +59,36 @@ export class GameClient {
     console.log('Data received from server:', data)
 
     if (data.type === 'initialPositions') {
-      Object.keys(data.players).forEach(playerId => {
-        const playerData = data.players[playerId]
-
-        if (!this.players[playerId]) {
-          const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z })
-          this.addPlayer(newPlayer)
-        }
-
-        this.players[playerId].setPosition(playerData.x, playerData.z)
-        this.players[playerId].updateElementPosition(this.scale)
-      })
+      this.dataTypeInitialPositions(data)
     } else if (data.type === 'updatePosition') {
-      let player = this.players[data.playerId]
-
-      if (!player) {
-        player = new this.characterClass(data.playerId, { x: data.x, z: data.z })
-        this.addPlayer(player)
-      }
-
-      player.setPosition(data.x, data.z)
-      player.updateElementPosition(this.scale)
+      this.dataTypeUpdatePosition(data)
     } else if (data.type === 'playerDisconnected') {
       this.removePlayer(data.playerId)
     } else {
       throw new Error('Unknown message type: ', data.type)
+    }
+  }
+
+  dataTypeInitialPositions(data) {
+    Object.keys(data.players).forEach(playerId => {
+      const playerData = data.players[playerId]
+      this.isPlayerExisting(playerId, playerData)
+
+      this.players[playerId].setPosition(playerData.x, playerData.z)
+      this.players[playerId].updateElementPosition(this.scale)
+    })
+  }
+
+  dataTypeUpdatePosition(data) {
+    this.isPlayerExisting(data.playerId, data)
+    this.players[data.playerId].setPosition(data.x, data.z)
+    this.players[data.playerId].updateElementPosition(this.scale)
+  }
+
+  isPlayerExisting(playerId, playerData) {
+    if (!this.players[playerId]) {
+      const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z })
+      this.addPlayer(newPlayer)
     }
   }
 
@@ -139,7 +144,7 @@ export class GameClient {
       const newPositionX = player.position.x + dx
       const newPositionz = player.position.z + dz
       
-      if (!(newPositionX > 1270 || newPositionX < 0 || newPositionz > 1165 || newPositionz < 0)) {
+      if (!(newPositionX > 1395 || newPositionX < 0 || newPositionz > 730 || newPositionz < 0)) {
         player.move(dx, dz)
         player.updateElementPosition()
         this.wsManager.send({

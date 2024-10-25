@@ -17,27 +17,9 @@ export class ExtendedGameClient extends GameClient {
     console.log('Data received from server:', data)
   
     if (data.type === 'initialPositions') {
-      Object.keys(data.players).forEach(playerId => {
-        const playerData = data.players[playerId]
-  
-        if (!this.players[playerId]) {
-          const newPlayer = new this.characterClass(playerId, { x: playerData.x, z: playerData.z })
-          this.addPlayer(newPlayer)
-        }
-  
-        this.players[playerId].setPosition(playerData.x, playerData.z)
-        this.players[playerId].updateElementPosition(this.scale)
-      })
+      this.dataTypeInitialPositions(data)
     } else if (data.type === 'updatePosition') {
-      let player = this.players[data.playerId]
-  
-      if (!player) {
-        player = new this.characterClass(data.playerId, { x: data.x, z: data.z })
-        this.addPlayer(player)
-      }
-
-      player.setPosition(data.x, data.z)
-      player.updateElementPosition(this.scale)
+      this.dataTypeUpdatePosition(data)
     } else if (data.type === 'playerDisconnected') {
       this.removePlayer(data.playerId)
     } else if (data.type === 'spawnFlowers') {

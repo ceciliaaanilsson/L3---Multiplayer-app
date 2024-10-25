@@ -1,17 +1,9 @@
 #game {
     background-image: url('../img/game_board_l3.jpg');
-    height: 680px;
+    height: 770px;
     width: 1425px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    border-radius: 5px;
 }
-
-/* .lobby {
-    background-image: url('../img/lobby_floor_l3.png');
-    height: 1200px;
-    width: 1300px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center; 
-} */
